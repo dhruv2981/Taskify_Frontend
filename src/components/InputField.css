@@ -1,0 +1,16 @@
+.input{
+    display:flex;
+    width:90%;
+    border-radius:2rem;
+    align-items: center;
+    justify-content:center ;
+    position: relative;
+}
+
+.input_field{
+    width:100%;
+    padding:0.4rem;
+    font-size:1.5rem;
+    border-radius: 2rem;
+
+}
