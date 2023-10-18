@@ -1,0 +1,50 @@
+.page{
+    display:flex;
+    width:100vw;
+    height:100vh;
+    justify-content: center;
+    align-items:center;
+    background: #56CCF2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+.oauth_box{
+    display:flex;
+    border: 0.2rem black solid;
+    border-radius: 1rem;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    gap:4rem;
+    padding:3rem 4rem 4rem 4rem;
+    background:white;
+  
+
+
+}
+.taskify{
+    width:12rem;
+    
+}
+.button{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    background-color: white;
+    gap:0.4rem;
+    border-color:black;
+    border-radius:0.3rem;
+    
+}
+.button p{
+    display:inline;
+    font-size:1.3rem;
+    font-weight: 540;
+    color:black;
+
+
+}
+.button img{
+    width:2.9rem;
+}
