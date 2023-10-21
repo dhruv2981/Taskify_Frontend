@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import Oauth from './components/Oauth';
+import React from 'react';
+import Oauth from './containers/Oauth';
+import ListProjectComponent from './containers/Dashboard';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import OauthJump from './containers/OauthJump';
 
 
 
@@ -38,10 +41,16 @@ import Oauth from './components/Oauth';
 
 function App(): React.ReactElement {
   return (
-    <div>
-      <Oauth />
-    </div>
-  );
+    <BrowserRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<Oauth />} />
+          <Route path="oauth/jump/" element={<OauthJump />} />
+          <Route path="dashboard/" element={<ListProjectComponent />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  ); 
 }
 export default App;
 

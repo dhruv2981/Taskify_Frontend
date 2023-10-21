@@ -21,7 +21,7 @@ const Oauth: React.FC = () => {
         ></img>
         <button className="button" onClick={signinButton} type="submit">
             <img src={require('./../assets/images/channeli_image.jpeg')} alt='' className="channeli"></img>
-          <p>Sign in with Channeli</p>
+            <p>Sign in with Channeli</p>
         </button>
       </div>
     </div>
