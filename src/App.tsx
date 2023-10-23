@@ -1,8 +1,8 @@
 import React from 'react';
-import Oauth from './containers/Oauth';
-import ListProjectComponent from './containers/Dashboard';
+import Oauth from './pages/Oauth';
+import ListProjectComponent from './pages/Dashboard';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import OauthJump from './containers/OauthJump';
+import OauthJump from './pages/OauthJump';
 
 
 

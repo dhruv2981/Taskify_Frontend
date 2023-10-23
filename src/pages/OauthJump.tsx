@@ -16,13 +16,21 @@ export default function OauthJump(){
             navigate("/")
         }
         
-    },)
+    });
       const searchParams = new URLSearchParams(window.location.search);
       const token = searchParams.get("token");
       console.log(token)
       if(token!=null){
         localStorage.setItem("auth_token", token);
       }
+    // const searchParams = new URLSearchParams(window.location.search);
+    // const token = searchParams.get("token");
+    // console.log(token);
+
+    // if (token != null) {
+    //   // Set the cookie with the token
+    //   document.cookie = `auth_token=${token}; expires=; path=/`;
+    // }
       
     
 
