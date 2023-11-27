@@ -1,0 +1,35 @@
+.listItem{
+    text-align:center;
+    margin:0rem;
+    
+    
+}
+.heading{
+    text-align:center;
+    font-size:1.8rem;
+    /* font */
+}
+
+.listItemText{
+    font-size:1.2rem;
+    font-weight: 400;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    /* text-align:center; */
+}
+
+.projectList{
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+    padding:1.5rem 0rem 1.5rem 0rem;
+    
+    /* background-color: black; */
+
+
+}
+
+.addButton{
+    align-self:center;
+    text-align: center;
+}

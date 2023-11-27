@@ -15,10 +15,10 @@ function App(): React.ReactElement {
       <div>
         <Routes>
           <Route path="/" element={<Oauth />} />
-          <Route path="oauth/jump/" element={<OauthJump />} />
-          <Route path="dashboard/" element={<Dashboard />} />
-          {/* <Route path="project/" element={<Dashboard />} /> */}
-          <Route path="project/:id" element={<Project />} />
+          <Route path="/oauth/jump/" element={<OauthJump />} />
+          <Route path="/dashboard/" element={<Dashboard />} />
+          {/* <Route path="project/" element={<Dashboard />} /> */} 
+          <Route path="/project/:id" element={<Project />} />
         </Routes>
       </div>
     </BrowserRouter>

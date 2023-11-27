@@ -15,6 +15,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Typography } from "@mui/material";
+import './../../../assets/css/navbar.css';
 
 function Navbar() {
   const Search = styled("div")(({ theme }) => ({
@@ -57,6 +58,10 @@ function Navbar() {
       },
     },
   }));
+  // const taskify={
+  //   position:'fixed',
+  //   left:'1rem',
+  // }
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -159,7 +164,9 @@ function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h4">Taskify</Typography>
+          <div className="taskify">
+            <Typography variant="h4">Taskify</Typography>
+          </div>
           {/* <img
             src="taskify_frontend/src/assets/images/taskify-low-resolution-logo-black-on-white-background (1).png"
             alt="TASKIFY"

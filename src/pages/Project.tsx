@@ -21,10 +21,12 @@ const Project = () => {
     };
 
   return (
-
+    <>
+    {console.log("hi done")}
     <div>
-        
+       this is project page 
     </div>
+    </>
   )
 }
 export default Project;
