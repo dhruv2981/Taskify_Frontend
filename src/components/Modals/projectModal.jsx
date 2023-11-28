@@ -6,17 +6,15 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
-import { createProjectApi } from "../../Apis/ProjectApi";
 import { fetchUsers, selectUsers } from "../../app/features/userSlice";
-import { useSelect } from "@mui/base";
+import { createProject } from "../../app/features/projectSlice";
+import { singleUserSlice } from "./../../app/features/singleUserSlice";
 
-const ProjectModal = () => {
+const ProjectModal = (props) => {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -44,32 +42,36 @@ const ProjectModal = () => {
   };
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
+  const currentUser = useSelector((state) => state.singleUser);
 
-  const createProject = () => {
+  const handleCreateProject = () => {
+    const removedId = currentUser["id"];
     const newProject = {
       name: projectName,
       description: projectDescription,
-      member: personId,
+      member: [...personId, removedId],
       year1_visibility: visibilityYear1,
       year2_visibility: visibilityYear2,
       year3_visibility: visibilityYear3,
       year4_visibility: visibilityYear4,
       year5_visibility: visibilityYear5,
     };
-    // console.log("l");
-    // const name=;
-    // const description=document.getElementsByClassName("input-description").value;
-    // const members = document.getElementById("demo-multiple-questions").value;
-    // console.log(projectName);
-    // console.log(projectDescription);
-    // console.log(personId);
-    // console.log(visibilityYear1);
-    // console.log(visibilityYear2);
-    // dispatch(createProject(newProject));
+    console.log("ji");
+    console.log([...personId, removedId]);
+    dispatch(createProject(newProject));
+    closeCreateProjectModal();
+
+    console.log("vr");
   };
+
+  const { fromChild } = props;
+
+  const closeCreateProjectModal = () => {
+    fromChild(false);
+  };
+
   const [open, setOpen] = React.useState(true);
   const handleClose = () => setOpen(false);
-  const [personName, setPersonName] = React.useState([]);
   const [personId, setPersonId] = React.useState([]);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
@@ -79,19 +81,10 @@ const ProjectModal = () => {
   const [visibilityYear4, setVisibilityYear4] = React.useState(true);
   const [visibilityYear5, setVisibilityYear5] = React.useState(true);
 
-  // const handleName=(event)>{
-  //   const {
-  //     target:{value},}=event;
-  //   }
-  // }
-
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    // setPersonName(
-    //   typeof value === "string" ? value.split(",") : value
-    // );
     setPersonId(typeof value === "number" ? value.split(",") : value);
   };
 
@@ -115,7 +108,10 @@ const ProjectModal = () => {
             required
             id="outline-required"
             className="input-name"
-            onChange={(e) => setProjectName(e.target.value)}
+            onChange={(e) => {
+              e.preventDefault();
+              setProjectName(e.target.value);
+            }}
             // onChange={handleName}
             label="Required"
             defaultValue=""
@@ -128,7 +124,10 @@ const ProjectModal = () => {
             required
             id="outline-required"
             className="input-description"
-            onChange={(e) => setProjectDescription(e.target.value)}
+            onChange={(e) => {
+              e.preventDefault();
+              setProjectDescription(e.target.value);
+            }}
             label="Required"
             defaultValue=""
           />
@@ -146,13 +145,16 @@ const ProjectModal = () => {
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
           >
-            {users.map((user) => (
-              // eslint-disable-next-line no-sequences
-              <MenuItem key={user.name} value={user.id}>
-                <Checkbox checked={personName.indexOf(user.name) > -1} />
-                <ListItemText primary={user.name} />
-              </MenuItem>
-            ))}
+            {users.map(
+              (user) =>
+                user.name !== currentUser.name && (
+                  // eslint-disable-next-line no-sequences
+                  <MenuItem key={user.name} value={user.id}>
+                    <Checkbox checked={personId.indexOf(user.name) > -1} />
+                    <ListItemText primary={user.name} />
+                  </MenuItem>
+                )
+            )}
           </Select>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Visibility
@@ -161,7 +163,10 @@ const ProjectModal = () => {
             control={
               <Checkbox
                 defaultChecked
-                onChange={(e) => setVisibilityYear1(e.target.checked)}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVisibilityYear1(e.target.checked);
+                }}
               />
             }
             // onChange={handleName}/>}
@@ -171,7 +176,10 @@ const ProjectModal = () => {
             control={
               <Checkbox
                 defaultChecked
-                onChange={(e) => setVisibilityYear2(e.target.checked)}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVisibilityYear2(e.target.checked);
+                }}
               />
             }
             label="Year 2"
@@ -180,7 +188,10 @@ const ProjectModal = () => {
             control={
               <Checkbox
                 defaultChecked
-                onChange={(e) => setVisibilityYear3(e.target.checked)}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVisibilityYear3(e.target.checked);
+                }}
               />
             }
             label="Year 3"
@@ -189,7 +200,10 @@ const ProjectModal = () => {
             control={
               <Checkbox
                 defaultChecked
-                onChange={(e) => setVisibilityYear4(e.target.checked)}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVisibilityYear4(e.target.checked);
+                }}
               />
             }
             label="Year 4"
@@ -198,7 +212,10 @@ const ProjectModal = () => {
             control={
               <Checkbox
                 defaultChecked
-                onChange={(e) => setVisibilityYear5(e.target.checked)}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setVisibilityYear5(e.target.checked);
+                }}
               />
             }
             label="Year 5"
@@ -206,7 +223,7 @@ const ProjectModal = () => {
           <Button
             variant="contained"
             onClick={() => {
-              createProject();
+              handleCreateProject();
             }}
           >
             Create
