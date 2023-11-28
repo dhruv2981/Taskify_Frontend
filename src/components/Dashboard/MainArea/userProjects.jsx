@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProjects,
   selectProjects,
-} from "../../../app/features/projectSlice";
+} from "../../../app/features/projectSlice.ts";
 import { store } from "../../../app/store";
 
 const UserProjects = () => {

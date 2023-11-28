@@ -14,7 +14,6 @@ import {Link} from 'react-router-dom';
 function ListProjectComponent(props:any) {
   const [projectList, setProjectList] = useState([]);
   const {fromChild}=props;
-  const [openProjectModal,setOpenProjectModal]=useState(false);
   const openCreateProjectModal=()=>{
     fromChild(true)
   }

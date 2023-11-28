@@ -165,7 +165,7 @@ function Navbar() {
       <AppBar position="static">
         <Toolbar>
           <div className="taskify">
-            <Typography variant="h4">Taskify</Typography>
+            <Typography variant="h4" style={{position:'relative',left:'2.6rem'}}>Taskify</Typography>
           </div>
           {/* <img
             src="taskify_frontend/src/assets/images/taskify-low-resolution-logo-black-on-white-background (1).png"

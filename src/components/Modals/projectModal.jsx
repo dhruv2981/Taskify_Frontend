@@ -27,18 +27,7 @@ const ProjectModal = () => {
       },
     },
   };
-  // const names = [
-  //   "Oliver Hansen",
-  //   "Van Henry",
-  //   "April Tucker",
-  //   "Ralph Hubbard",
-  //   "Omar Alexander",
-  //   "Carlos Abbott",
-  //   "Miriam Wagner",
-  //   "Bradley Wilkerson",
-  //   "Virginia Andrews",
-  //   "Kelly Snyder",
-  // ];
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -54,24 +43,58 @@ const ProjectModal = () => {
     gap: "0.5rem",
   };
   const dispatch = useDispatch();
-  const users=useSelector(selectUsers);
+  const users = useSelector(selectUsers);
 
   const createProject = () => {
-    dispatch(createProject());
+    const newProject = {
+      name: projectName,
+      description: projectDescription,
+      member: personId,
+      year1_visibility: visibilityYear1,
+      year2_visibility: visibilityYear2,
+      year3_visibility: visibilityYear3,
+      year4_visibility: visibilityYear4,
+      year5_visibility: visibilityYear5,
+    };
+    // console.log("l");
+    // const name=;
+    // const description=document.getElementsByClassName("input-description").value;
+    // const members = document.getElementById("demo-multiple-questions").value;
+    // console.log(projectName);
+    // console.log(projectDescription);
+    // console.log(personId);
+    // console.log(visibilityYear1);
+    // console.log(visibilityYear2);
+    // dispatch(createProject(newProject));
   };
   const [open, setOpen] = React.useState(true);
   const handleClose = () => setOpen(false);
   const [personName, setPersonName] = React.useState([]);
+  const [personId, setPersonId] = React.useState([]);
+  const [projectName, setProjectName] = React.useState("");
+  const [projectDescription, setProjectDescription] = React.useState("");
+  const [visibilityYear1, setVisibilityYear1] = React.useState(true);
+  const [visibilityYear2, setVisibilityYear2] = React.useState(true);
+  const [visibilityYear3, setVisibilityYear3] = React.useState(true);
+  const [visibilityYear4, setVisibilityYear4] = React.useState(true);
+  const [visibilityYear5, setVisibilityYear5] = React.useState(true);
+
+  // const handleName=(event)>{
+  //   const {
+  //     target:{value},}=event;
+  //   }
+  // }
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    // setPersonName(
+    //   typeof value === "string" ? value.split(",") : value
+    // );
+    setPersonId(typeof value === "number" ? value.split(",") : value);
   };
+
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
@@ -91,6 +114,9 @@ const ProjectModal = () => {
           <TextField
             required
             id="outline-required"
+            className="input-name"
+            onChange={(e) => setProjectName(e.target.value)}
+            // onChange={handleName}
             label="Required"
             defaultValue=""
           />
@@ -101,6 +127,8 @@ const ProjectModal = () => {
           <TextField
             required
             id="outline-required"
+            className="input-description"
+            onChange={(e) => setProjectDescription(e.target.value)}
             label="Required"
             defaultValue=""
           />
@@ -112,14 +140,15 @@ const ProjectModal = () => {
             labelId="demo-multiple-checkbox-label"
             id="demo-multiple-checkbox"
             multiple
-            value={personName}
+            value={personId}
             onChange={handleChange}
             // input={<OutlinedInput label="Tag" />}
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
           >
             {users.map((user) => (
-              <MenuItem key={user.name} value={user.name}>
+              // eslint-disable-next-line no-sequences
+              <MenuItem key={user.name} value={user.id}>
                 <Checkbox checked={personName.indexOf(user.name) > -1} />
                 <ListItemText primary={user.name} />
               </MenuItem>
@@ -129,23 +158,49 @@ const ProjectModal = () => {
             Visibility
           </Typography>
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={(e) => setVisibilityYear1(e.target.checked)}
+              />
+            }
+            // onChange={handleName}/>}
             label="Year 1"
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={(e) => setVisibilityYear2(e.target.checked)}
+              />
+            }
             label="Year 2"
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={(e) => setVisibilityYear3(e.target.checked)}
+              />
+            }
             label="Year 3"
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={(e) => setVisibilityYear4(e.target.checked)}
+              />
+            }
             label="Year 4"
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={(e) => setVisibilityYear5(e.target.checked)}
+              />
+            }
             label="Year 5"
           />
           <Button
