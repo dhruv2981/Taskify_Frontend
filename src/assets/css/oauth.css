@@ -24,6 +24,7 @@
 
 }
 .taskify{
+    display:flex;
     width:12rem;
     
 }

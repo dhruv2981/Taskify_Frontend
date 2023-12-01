@@ -15,7 +15,11 @@ const listSlice = createSlice({
     loading: "idle",
     error: "Lists could not be retreived",
   },
-  reducers: {},
+  reducers: {
+    // insertData:{
+      
+    // }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchLists.pending, (state) => {
       state.loading = "pending";
@@ -26,8 +30,22 @@ const listSlice = createSlice({
     });
     builder.addCase(fetchLists.rejected, (state, action) => {
       state.loading = "rejected";
-      state.error = action.error.message!;
+      state.error = action.error.message;
     });
+    builder.addCase(createList.fulfilled, (state, action) => {
+      state.loading = "rejected";
+      state.lists.push(action.payload);
+    });
+    builder.addCase(deleteList.fulfilled, (state, action) => {
+        state.lists = state.lists.filter((task) => task.id !== action.payload);
+      })
+    builder.addCase(updateList.fulfilled, (state, action) => {
+        // Update the task in the state
+        const updatedTaskIndex = state.lists.findIndex((task) => task.id === action.payload.id);
+        if (updatedTaskIndex !== -1) {
+          state.lists[updatedTaskIndex] = action.payload;
+        }
+      });
   },
 });
 
@@ -51,7 +69,7 @@ export const fetchList = createAsyncThunk("list/fetchLists", async (listId) => {
   }
 });
 
-export const createList = createAsyncThunk("list/Lists", async (newList) => {
+export const createList = createAsyncThunk("list/createList", async (newList) => {
   try {
     const response = await createListApi(newList);
     console.log(response.data);
@@ -76,7 +94,7 @@ export const updateList = createAsyncThunk(
 
 export const deleteList = createAsyncThunk(
   "list/deleteList",
-  async (listId, newList) => {
+  async (listId) => {
     try {
       await deleteListApi(listId);
       return listId;
@@ -97,5 +115,5 @@ export const deleteList = createAsyncThunk(
 //   useEffect(() => {
 //     fetchData();
 //   }, []);
-export const selectLists = (state: any) => state.lists.lists;
+export const selectLists = (state) => state.lists.lists;
 export default listSlice.reducer;

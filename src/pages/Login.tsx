@@ -6,6 +6,8 @@ const signinButton = (): void => {
     window.location.replace(
       "https://channeli.in/oauth/authorise/?client_id=vHvA7kB4GedavN5kSfWRIjvFg1geQQDkJss21yBv&redirect_uri=http://127.0.0.1:8000/taskify/oauth/callback/&state=success"
     );
+    
+    // redirect(f'http://localhost:3000/oauth/jump/?token={token.key}')
 };
 
 const Oauth: React.FC = () => {

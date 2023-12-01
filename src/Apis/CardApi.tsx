@@ -18,7 +18,7 @@ export const fetchCardsApi = () => {
 };
 
 export const fetchCardApi = (cardId: any) => {
-  return axios.get(`http://127.0.0.1:8000/taskify/cards/${cardId}`, {
+  return axios.get(`http://127.0.0.1:8000/taskify/cards/${cardId}/`, {
     headers: {
       Authorization: "Token " + token,
     },
@@ -34,7 +34,7 @@ export const createCardApi = (newCard: any) => {
 };
 
 export const updateCardApi = (cardId: any, newCard: any) => {
-  return axios.put(`http://127.0.0.1:8000/taskify/cards/${cardId}`, newCard, {
+  return axios.put(`http://127.0.0.1:8000/taskify/cards/${cardId}/`, newCard, {
     headers: {
       Authorization: "Token " + token,
     },
@@ -42,7 +42,7 @@ export const updateCardApi = (cardId: any, newCard: any) => {
 };
 
 export const deleteCardApi = (cardId: any) => {
-  return axios.delete(`http://127.0.0.1:8000/taskify/cards/${cardId}`, {
+  return axios.delete(`http://127.0.0.1:8000/taskify/cards/${cardId}/`, {
     headers: {
       Authorization: "Token " + token,
     },

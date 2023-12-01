@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProjects,
   selectProjects,
-} from "../../../app/features/projectSlice.ts";
-import { store } from "../../../app/store";
+} from "../../../app/features/projectSlice.js";
+
 
 const UserProjects = () => {
   const heading = {
@@ -22,6 +22,8 @@ const UserProjects = () => {
   const projectCard = {};
   const dispatch = useDispatch();
   const projects = useSelector(selectProjects);
+  // console.log(projects,'f');
+  const currentUser = useSelector((state) => state.singleUser);
 
   useEffect(() => {
     dispatch(fetchProjects());
@@ -34,7 +36,11 @@ const UserProjects = () => {
         {/* <div style={projectCard}> */}
         {console.log(projects, "A")}
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          // Conditionally render ProjectCard based on whether currentUser.id is in the members array
+          // Adjust the condition as per your project structure
+          (project.member.includes(currentUser.id)) ? (
+            <ProjectCard key={project.id} project={project} />
+          ) : null
         ))}
         {console.log("b")}
         {/* </div> */}

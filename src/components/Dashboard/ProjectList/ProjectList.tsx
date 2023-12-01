@@ -4,7 +4,6 @@ import InputBase from "@mui/material/InputBase";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import { AddRounded } from "@mui/icons-material";
-import { List , ListItem,ListItemText,Typography} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import './../../../assets/css/projectList.css';
 import {Link} from 'react-router-dom';
@@ -13,9 +12,9 @@ import {Link} from 'react-router-dom';
 
 function ListProjectComponent(props:any) {
   const [projectList, setProjectList] = useState([]);
-  const {fromChild}=props;
+  const {fromChildProject}=props;
   const openCreateProjectModal=()=>{
-    fromChild(true)
+    fromChildProject(true)
   }
  
 

@@ -17,7 +17,7 @@ export const fetchListsApi = () => {
   });
 };
 export const fetchListApi = (listId:any) => {
-  return axios.get(`http://127.0.0.1:8000/taskify/lists/${listId}`, {
+  return axios.get(`http://127.0.0.1:8000/taskify/lists/${listId}/`, {
     headers: {
       Authorization: "Token " + token,
     },
@@ -32,7 +32,7 @@ export const createListApi = (newList: any) => {
 };
 export const updateListApi = (listId: any, newList: any) => {
   return axios.put(
-    `http://127.0.0.1:8000/taskify/lists/${listId}`,
+    `http://127.0.0.1:8000/taskify/lists/${listId}/`,
     newList,
     {
       headers: {
@@ -42,7 +42,7 @@ export const updateListApi = (listId: any, newList: any) => {
   );
 };
 export const deleteListApi = (listId: any) => {
-  return axios.delete(`http://127.0.0.1:8000/taskify/lists/${listId}`, {
+  return axios.delete(`http://127.0.0.1:8000/taskify/lists/${listId}/`, {
     headers: {
       Authorization: "Token " + token,
     },

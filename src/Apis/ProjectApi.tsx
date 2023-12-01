@@ -18,7 +18,7 @@ export const fetchProjectsApi = () => {
 };
 
 export const fetchProjectApi = (projectId: any) => {
-  return axios.get(`http://127.0.0.1:8000/taskify/projects/${projectId}`, {
+  return axios.get(`http://127.0.0.1:8000/taskify/projects/${projectId}/`, {
     headers: {
       Authorization: "Token " + token,
     },
@@ -34,8 +34,9 @@ export const createProjectApi = (newProject: any) => {
 };
 
 export const updateProjectApi = (projectId: any, newProject: any) => {
+  console.log(newProject,"req");
   return axios.put(
-    `http://127.0.0.1:8000/taskify/projects/${projectId}`,
+    `http://127.0.0.1:8000/taskify/projects/${projectId}/`,
     newProject,
     {
       headers: {
@@ -46,7 +47,7 @@ export const updateProjectApi = (projectId: any, newProject: any) => {
 };
 
 export const deleteProjectApi = (projectId: any) => {
-  return axios.delete(`http://127.0.0.1:8000/taskify/projects/${projectId}`, {
+  return axios.delete(`http://127.0.0.1:8000/taskify/projects/${projectId}/`, {
     headers: {
       Authorization: "Token " + token,
     },

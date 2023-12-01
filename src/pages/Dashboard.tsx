@@ -4,6 +4,7 @@ import ListProjectComponent from "../components/Dashboard/ProjectList/ProjectLis
 import Navbar from "../components/Dashboard/Navbar/Navbar";
 import UserProjects from "../components/Dashboard/MainArea/userProjects";
 import ProjectModal from "../components/Modals/projectModal"
+import { CurrentUser } from "./../CurrentUser/CurrentUser";
 
 function Dashboard() {
   const [openProjectModal,setOpenProjectModal]=useState(false);
@@ -48,23 +49,25 @@ function Dashboard() {
 
   return (
     <div>
-      {!openProjectModal &&
-      <div style={fullPage}>
-        <div style={navbarStyle}>
-          <Navbar />
-        </div>
-        <div style={mainContent}>
-          <div style={projectList}>
-            <ListProjectComponent fromChild={handleChildData}/>
+      <CurrentUser></CurrentUser>
+      {!openProjectModal && (
+        <div style={fullPage}>
+          <div style={navbarStyle}>
+            <Navbar />
           </div>
-          <div style={centerContainer}>
-            <div style={projectSlider}>
-              <UserProjects />
+          <div style={mainContent}>
+            <div style={projectList}>
+              <ListProjectComponent fromChild={handleChildData} />
+            </div>
+            <div style={centerContainer}>
+              <div style={projectSlider}>
+                <UserProjects />
+              </div>
             </div>
           </div>
         </div>
-      </div>}
-      {openProjectModal && <ProjectModal/>}
+      )}
+      {openProjectModal && <ProjectModal fromChildProject={handleChildData} />}
     </div>
   );
 }
