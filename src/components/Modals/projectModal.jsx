@@ -12,7 +12,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
 import { fetchUsers, selectUsers } from "../../app/features/userSlice";
 import { createProject } from "../../app/features/projectSlice";
-import { singleUserSlice } from "./../../app/features/singleUserSlice";
 
 const ProjectModal = (props) => {
   const ITEM_HEIGHT = 48;
@@ -40,6 +39,7 @@ const ProjectModal = (props) => {
     flexDirection: "column",
     gap: "0.5rem",
   };
+  
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
   const currentUser = useSelector((state) => state.singleUser);
@@ -48,7 +48,7 @@ const ProjectModal = (props) => {
     const removedId = currentUser["id"];
     const newProject = {
       name: projectName,
-      description: projectDescription,
+      wiki: projectDescription,
       member: [...personId, removedId],
       year1_visibility: visibilityYear1,
       year2_visibility: visibilityYear2,
@@ -64,14 +64,14 @@ const ProjectModal = (props) => {
     console.log("vr");
   };
 
-  const { fromChild } = props;
+  const { fromChildProject } = props;
 
   const closeCreateProjectModal = () => {
-    fromChild(false);
+    fromChildProject(false);
   };
 
   const [open, setOpen] = React.useState(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {setOpen(false); fromChildProject(false);}
   const [personId, setPersonId] = React.useState([]);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
