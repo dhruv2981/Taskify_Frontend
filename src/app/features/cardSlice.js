@@ -9,33 +9,23 @@ import {
 } from "../../Apis/CardApi";
 
 const cardSlice = createSlice({
-  name: "card",
+  name: "cards",
   initialState: {
-    
-    card: {
-    title :'',
-    assignees:[],
-    deadline:'',
-    created_at:'',
-    priority:'',
-    is_resolved:'n',
-    description:'',
-    list:'',
-    },
-
+    cards: [],
     loading: "idle",
-    error: "Cards could not be retreived",
+    error: "Card could not be retreived",
   },
+
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchCard.pending, (state) => {
+    builder.addCase(fetchCards.pending, (state) => {
       state.loading = "pending";
     });
-    builder.addCase(fetchCard.fulfilled, (state, action) => {
+    builder.addCase(fetchCards.fulfilled, (state, action) => {
       state.loading = "fulfilled";
       state.cards = action.payload;
     });
-    builder.addCase(fetchCard.rejected, (state, action) => {
+    builder.addCase(fetchCards.rejected, (state, action) => {
       state.loading = "rejected";
       state.error = action.error.message;
     });
@@ -43,11 +33,12 @@ const cardSlice = createSlice({
       state.loading = "fulfilled";
       state.cards.push(action.payload);
     });
+    
   },
 });
 
 export const fetchCards = createAsyncThunk(
-  "card/fetchCards",
+  "cards/fetchCards",
   async () => {
     try {
       const response = await fetchCardsApi();
@@ -59,21 +50,9 @@ export const fetchCards = createAsyncThunk(
   }
 );
 
-export const fetchCard = createAsyncThunk(
-  "card/fetchCards",
-  async (cardId) => {
-    try {
-      const response = await fetchCardApi(cardId);
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.log("Problem fetching card");
-    }
-  }
-);
 
 export const createCard = createAsyncThunk(
-  "card/Cards",
+  "cards/createCard",
   async (newCard) => {
     try {
       const response = await createCardApi(newCard);
@@ -87,8 +66,9 @@ export const createCard = createAsyncThunk(
 
 // export const updateCard = createAsyncThunk(
 //   "card/updateCards",
-//   async (cardId, newCard) => {
+//   async (object) => {
 //     try {
+//       const {cardId,newCard}=object;
 //       const response = await updateCardApi(cardId, newCard);
 //       console.log(response.data);
 //       return response.data;
@@ -110,16 +90,5 @@ export const createCard = createAsyncThunk(
 //   }
 // );
 
-//action
-
-//reducer
-
-//     .then(response=>{
-//         setCardList(response.data)})
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-export const selectCard = (state) => state.card.card;
+export const selectCards = (state) => state.cards.cards;
 export default cardSlice.reducer;

@@ -5,6 +5,7 @@ import cardSlice from "./features/cardSlice";
 import listSlice from "./features/listSlice";
 import userSlice from "./features/userSlice";
 import singleUserSlice from "./features/singleUserSlice";
+import singleCardSlice from "./features/singleCardSlice";
 // import projectSlice from './features/projectSlice';
 
 export const store = configureStore({
@@ -15,5 +16,6 @@ export const store = configureStore({
     lists: listSlice,
     users: userSlice,
     singleUser:singleUserSlice,
+    singleCard:singleCardSlice,
   },
 });
