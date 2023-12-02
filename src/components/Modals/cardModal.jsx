@@ -15,6 +15,9 @@ import Button from "@mui/material/Button";
 import { fetchUsers, selectUsers } from "../../app/features/userSlice";
 import { createCard } from "../../app/features/cardSlice";
 import { updateProjectState } from "../../app/features/singleProjectSlice";
+import { selectAddEdit,updateAddEditState } from "../../app/features/addEditStateSlice";
+import { fetchCardApi, updateCardApi } from "../../Apis/CardApi";
+import toast from "react-hot-toast";
 
 const CardModal = (props) => {
   const style = {
@@ -44,15 +47,22 @@ const CardModal = (props) => {
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
   const { fromChildCard, project, list } = props;
-  console.log(list.list.id, "list");
-  const listToCard = list.list;
+  console.log(list, "list");
+  // const listToCard = list.list;
+  // console.log(listToCard);
   const loading = useSelector((state) => state.users.loading);
+  const addEditState=useSelector(selectAddEdit);
 
   const [open, setOpen] = React.useState(true);
   const handleClose = () => {
     setOpen(false);
     fromChildCard(false);
-    console.log(false);
+    const newAddEditState = {
+      ...addEditState,
+      editCard: false,
+      editCardId: "",
+    };
+    dispatch(updateAddEditState({ newAddEditState }));
   }
   const [cardTitle, setCardTitle] = React.useState("");
   const [cardDescription, setCardDescription] = React.useState("");
@@ -76,6 +86,49 @@ const CardModal = (props) => {
   const handleDeadline = (e) => {
     setDeadline(e);
   };
+
+
+  const handleEditCard=async()=>{
+    const updatedCard = {
+      title: cardTitle,
+      description: cardDescription,
+      assignees: assignees,
+      priority: priority,
+      deadline: deadline,
+      list: list.id,
+    };
+    console.log(updatedCard, "new");
+    const response=await updateCardApi(addEditState.editCardId,updatedCard);
+    fromChildCard(false);
+     const updatedLists = project.lists.map((listItem) => {
+       if (listItem.id === updatedCard.list) {
+         // Update the selected list by updating the selected card
+         return {
+          ...listItem,
+           cards: (list).cards.map((card) =>
+             card.id === addEditState.editCardId ? response.data : card
+           ),
+         };
+       } else {
+         return listItem;
+       }
+     });
+     const newAddEditState = {
+       ...addEditState,
+       editCard: false,
+       editCardId: "",
+     };
+     dispatch(updateAddEditState({ newAddEditState }));
+     const updatedProject = {
+       ...project,
+       lists: updatedLists,
+     };
+     dispatch(updateProjectState({ updatedProject }));
+     toast.success("Card edited successfully");
+
+
+
+  }
 
   const handleCreateCard = async () => {
     const newCard = {
@@ -107,6 +160,7 @@ const CardModal = (props) => {
     };
     dispatch(updateProjectState({ updatedProject }));
   };
+
   const checkStatus = () => {
     if (loading == "idle" || loading == "pending") {
       return true;
@@ -114,8 +168,13 @@ const CardModal = (props) => {
       return false;
     }
   };
+
   const fetchData = async () => {
     await dispatch(fetchUsers());
+     if (addEditState.editCard) {
+       const editCardResponse=await fetchCardApi(addEditState.editCardId);
+       console.log(editCardResponse.data,"edited card old data");
+     }
     setOpen(true);
   };
   useEffect(() => {
@@ -207,10 +266,13 @@ const CardModal = (props) => {
             <Button
               variant="contained"
               onClick={() => {
-                handleCreateCard();
+                
+                  addEditState.editCard ? handleEditCard() : handleCreateCard();
+                
+                
               }}
             >
-              Create
+              {addEditState.editCard ? 'Edit':'Create'}
             </Button>
           </Box>
         </Modal>

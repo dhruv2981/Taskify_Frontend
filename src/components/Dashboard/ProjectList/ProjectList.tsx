@@ -112,6 +112,7 @@ function ListProjectComponent(props:any) {
           <Link to={`/project/${project['id']}`} style={{ textDecoration: "none",color:'black' }}>
           <div key={index} className='listItem'>
             <p className='listItemText'>{project["name"]}</p>
+            
           </div>
           </Link>
         ))}

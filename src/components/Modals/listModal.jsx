@@ -8,6 +8,10 @@ import Button from "@mui/material/Button";
 import { createList } from "../../app/features/listSlice";
 import toast from "react-hot-toast";
 import { updateProjectState } from "../../app/features/singleProjectSlice";
+import { updateAddEditState ,selectAddEdit} from "../../app/features/addEditStateSlice";
+import { useSelector } from "react-redux";
+import { updateListApi } from "../../Apis/ListApi";
+
 
 const ListModal = (props) => {
   const style = {
@@ -30,9 +34,44 @@ const ListModal = (props) => {
   const handleClose = () => {
     setOpen(false);
     fromChild(false);
+    const newAddEditState = {
+      ...addEditState,
+      editList: false,
+      editListId: "",
+    };
+    dispatch(updateAddEditState({newAddEditState}))
   }
   const dispatch = useDispatch();
+  const addEditState=useSelector(selectAddEdit);
   const { fromChild, project } = props;
+
+  const handleEditList = async () => {
+    const updatedList = {
+      name: listName,
+      project: project.id,
+    };
+
+    const response = await updateListApi(addEditState.editListId,updatedList);
+    console.log(response.data, "o");
+    
+    const updatedProject = {
+      ...project,
+      lists: project.lists.map((list) =>
+        list.id === addEditState.editListId ? response.data : list
+      ),
+    };
+    const newAddEditState={
+      ...addEditState,
+      editList:false,
+      editListId:'',    
+    }
+    console.log(updatedProject, "k");
+    await dispatch(updateProjectState({ updatedProject }));
+    await dispatch(updateAddEditState({newAddEditState}));
+
+    fromChild(false);
+    toast.success("List edited successfully");
+  };
 
   const handleCreateList = async () => {
     const newList = {
@@ -80,10 +119,11 @@ const ListModal = (props) => {
           <Button
             variant="contained"
             onClick={() => {
-              handleCreateList();
+              addEditState.editList ? handleEditList() : handleCreateList()
+              
             }}
           >
-            Create
+            {addEditState.editList ? 'Edit' : 'Create'}
           </Button>
         </Box>
       </Modal>

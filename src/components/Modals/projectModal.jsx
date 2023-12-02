@@ -150,7 +150,7 @@ const ProjectModal = (props) => {
                 user.name !== currentUser.name && (
                   // eslint-disable-next-line no-sequences
                   <MenuItem key={user.name} value={user.id}>
-                    <Checkbox checked={personId.indexOf(user.name) > -1} />
+                    <Checkbox checked={personId.indexOf(user.id) > -1} />
                     <ListItemText primary={user.name} />
                   </MenuItem>
                 )
