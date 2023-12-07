@@ -63,7 +63,7 @@ const AddMemberModal = (props) => {
   const handleClose = () => {
     setOpen(false);
     fromChildMember(false);
-}
+  };
   const [personId, setPersonId] = React.useState([]);
 
   const handleChange = (event) => {

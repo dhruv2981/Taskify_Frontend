@@ -39,7 +39,7 @@ const ProjectModal = (props) => {
     flexDirection: "column",
     gap: "0.5rem",
   };
-  
+
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
   const currentUser = useSelector((state) => state.singleUser);
@@ -71,7 +71,10 @@ const ProjectModal = (props) => {
   };
 
   const [open, setOpen] = React.useState(true);
-  const handleClose = () => {setOpen(false); fromChildProject(false);}
+  const handleClose = () => {
+    setOpen(false);
+    fromChildProject(false);
+  };
   const [personId, setPersonId] = React.useState([]);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");

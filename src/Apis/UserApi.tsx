@@ -49,5 +49,16 @@ export const deleteUserApi = (userId: any) => {
   });
 };
 
+export const logout=()=>{
+  return (
+    axios.post("http://127.0.0.1:8000/taskify/logout/"),null,
+    {
+      headers: {
+        Authorization: "Token " + token,
+      },
+    }
+  );
+}
+
 
 

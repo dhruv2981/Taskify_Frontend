@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import { AddRounded } from "@mui/icons-material";
 import AddMemberModal from "../components/Modals/addMemberModal";
+import { selectAddEdit } from "./../app/features/addEditStateSlice";
 import "./..";
 import ProjectModal from "../components/Modals/projectModal";
+import toast from "react-hot-toast";
 
 const Project = () => {
   const mainContent = {
@@ -61,15 +63,12 @@ const Project = () => {
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.singleProject.loading);
-  console.log(loading,"u");
+
+  console.log(loading, "u");
   const { id } = useParams();
 
-  console.log(id);
   const fetchData = async () => {
-    // const { id } = useParams();
-    console.log("before");
     await dispatch(fetchProject(id));
-    console.log("after");
   };
 
   // dispatch(fetchProject(id));
@@ -83,10 +82,16 @@ const Project = () => {
   const [openCardModal, setOpenCardModal] = useState(false);
   const [openMemberModal, setOpenMemberModal] = useState(false);
   const [openProjectModal, setOpenProjectModal] = useState(false);
-  const [listPassCard,setListPassCard]=useState('');
-  const handleListPass=(listPassCard)=>{
+  const [listPassCard, setListPassCard] = useState("");
+  const addEditState = useSelector(selectAddEdit);
+  const currentUser = useSelector((state) => state.singleUser);
+  // if (addEditState.editList===true) {
+  //   setOpenListModal(true);
+  // }
+
+  const handleListPass = (listPassCard) => {
     setListPassCard(listPassCard);
-  }
+  };
   const handleChildData = (childData) => {
     setOpenListModal(childData);
   };
@@ -100,12 +105,25 @@ const Project = () => {
     setOpenProjectModal(childData);
   };
   const openCreateListModal = () => {
+    if (
+      !currentProject.member.includes(currentUser.id) &&
+      currentUser.role === "n"
+    ) {
+      toast.error("Only project member can do it");
+      return;
+    }
     setOpenListModal(true);
   };
   const openAddMemberModal = () => {
+    if (
+      !currentProject.member.includes(currentUser.id) &&
+      currentUser.role === "n"
+    ) {
+      toast.error("Only project member can do it");
+      return;
+    }
     setOpenMemberModal(true);
   };
-
 
   const openCreateCardModal = () => {
     setOpenCardModal(true);
@@ -121,11 +139,7 @@ const Project = () => {
 
   useEffect(() => {
     fetchData();
-  }, [dispatch,id]);
-
-  // if (!currentProject || currentProject.loading) {
-  //   return <div>Loading...</div>; // You can replace this with a loading spinner or component
-  // }
+  }, [dispatch, id]);
 
   return (
     <div>
@@ -193,7 +207,7 @@ const Project = () => {
                 </div>
               }
             </div>
-            {openListModal && (
+            {(openListModal || addEditState.editList) && (
               <ListModal fromChild={handleChildData} project={currentProject} />
             )}
             {openMemberModal && (
@@ -202,7 +216,7 @@ const Project = () => {
                 project={currentProject}
               />
             )}
-            {openCardModal && (
+            {(openCardModal || addEditState.editCard) && (
               <CardModal
                 fromChildCard={handleChildCardData}
                 project={currentProject}
@@ -212,7 +226,9 @@ const Project = () => {
           </div>
         </div>
       )}
-      {openProjectModal && <ProjectModal  fromChildProject={setOpenProjectModal}/>}
+      {openProjectModal && (
+        <ProjectModal fromChildProject={setOpenProjectModal} />
+      )}
     </div>
   );
 };

@@ -19,22 +19,10 @@ const projectSlice = createSlice({
     error: "Projects could not be retreived",
   },
   reducers: {
-    // Add your list-related actions here
-    // addList: (state, action) => {
-    //   state.projects.push(action.payload);
-    // },
-    // deleteList: (state, action) => {
-    //   state.projects = state.projects.filter(
-    //     (project) => project.id !== action.payload
-    //   );
-    // },
-    // updateProjectReducer: (state, action) => {
-    //   const { id, updatedProject } = action.payload;
-    //   const index = state.projects.findIndex((project) => project.id === id);
-    //   if (index !== -1) {
-    //     state.projects[index] = updatedProject;
-    //   }
-    // },
+    updateProjectsState: (state, action) => {
+      const { updatedProjects } = action.payload;
+      state.project = updatedProjects;
+    },
   },
 
   extraReducers: (builder) => {
@@ -53,10 +41,10 @@ const projectSlice = createSlice({
       state.loading = "fulfilled";
       state.projects.push(action.payload);
     });
+
     //  builder.addCase(deleteProject.fulfilled, (state, action) => {
     //    state.lists = state.lists.filter((task) => task.id !== action.payload);
     //  });
-   
   },
 });
 
@@ -115,5 +103,5 @@ export const createProject = createAsyncThunk(
 //action
 
 export const selectProjects = (state) => state.projects.projects;
-export const { addList, deleteList, updateProjectReducer } = projectSlice.actions;
+export const { addList, deleteList, updateProjectsState } = projectSlice.actions;
 export default projectSlice.reducer;

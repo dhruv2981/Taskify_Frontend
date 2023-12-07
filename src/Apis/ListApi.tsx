@@ -3,7 +3,7 @@ import axios from "axios";
 const getToken = () => {
   const token = localStorage.getItem("auth_token");
   if (!token) {
-    console.log("Token not foun in local storage");
+    console.log("Token not found in local storage");
   }
   return token;
 };

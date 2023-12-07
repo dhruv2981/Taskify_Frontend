@@ -6,6 +6,7 @@ import listSlice from "./features/listSlice";
 import userSlice from "./features/userSlice";
 import singleUserSlice from "./features/singleUserSlice";
 import singleCardSlice from "./features/singleCardSlice";
+import addEditStateSlice from "./features/addEditStateSlice";
 // import projectSlice from './features/projectSlice';
 
 export const store = configureStore({
@@ -17,5 +18,6 @@ export const store = configureStore({
     users: userSlice,
     singleUser:singleUserSlice,
     singleCard:singleCardSlice,
+    addEdit:addEditStateSlice,
   },
 });

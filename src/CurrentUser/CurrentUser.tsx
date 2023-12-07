@@ -11,23 +11,24 @@ export const CurrentUser = () => {
     const token = localStorage.getItem("auth_token");
     if (!token) {
       toast.error("Token not found in local storage");
+      window.location.href = "http://127.0.0.1:3000/";
       return;
     }
     try {
-      const response = await axios.get("http://127.0.0.1:8000/taskify/check_login/", {
-        headers: {
-          Authorization: "Token " + token,
-        },
-      });
+      const response = await axios.get(
+        "http://127.0.0.1:8000/taskify/check_login/",
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        }
+      );
       console.log(response.data.user, "v");
       if (!response.status) {
-        //   console.log("kuch to gadbad hai daya");
         window.location.href = "http://127.0.0.1:3000/";
       } else {
-        //   console.log("you can make this happen");
         dispatch(setUserData(response.data.user));
       }
-      
     } catch (error) {
       toast.error("Login first");
     }
@@ -35,11 +36,7 @@ export const CurrentUser = () => {
 
   useEffect(() => {
     fetchData();
-    // return () => {
-    //   second
-    // }
-  }, [])
-  
+  }, []);
 
   return <></>;
 };

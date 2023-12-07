@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 import ListProjectComponent from "../components/Dashboard/ProjectList/ProjectList";
 import Navbar from "../components/Dashboard/Navbar/Navbar";
 import UserProjects from "../components/Dashboard/MainArea/userProjects";
-import ProjectModal from "../components/Modals/projectModal"
+import ProjectModal from "../components/Modals/projectModal";
 import { CurrentUser } from "../CurrentUser/CurrentUser";
 import { fetchProjects } from "../app/features/projectSlice";
 import { useDispatch } from "react-redux";
-import UserCards from './../components/Dashboard/MainArea/userCard'
+import UserCards from "./../components/Dashboard/MainArea/userCard";
 
 function Dashboard() {
-  const [openProjectModal,setOpenProjectModal]=useState(false);
-  const handleChildData=(childData)=>{
+  const [openProjectModal, setOpenProjectModal] = useState(false);
+  const handleChildData = (childData) => {
     setOpenProjectModal(childData);
-  }
+  };
 
   const mainContent = {
     display: "flex",
@@ -29,7 +29,7 @@ function Dashboard() {
   const fullPage = {
     display: "flex",
     height: "100vh",
-    flexDirection: "column" ,
+    flexDirection: "column",
   };
 
   const projectList = {
@@ -48,14 +48,12 @@ function Dashboard() {
     flexGrow: "1",
     padding: "2rem 0rem 0rem 2rem",
   };
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const projectSlider = {};
   const cardSlider = {};
   useEffect(() => {
     dispatch(fetchProjects);
-   
-  }, [])
-  
+  }, []);
 
   return (
     <div>

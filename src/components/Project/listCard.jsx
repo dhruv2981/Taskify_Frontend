@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { CgAdd } from "react-icons/cg";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteOutline } from "react-icons/md";
@@ -11,7 +10,6 @@ import {
   selectAddEdit,
   updateAddEditState,
 } from "./../../app/features/addEditStateSlice";
-import { ListItem } from "@mui/material";
 import { deleteCardApi } from "../../Apis/CardApi";
 import toast from "react-hot-toast";
 
@@ -26,7 +24,7 @@ const ListCard = (props) => {
     border: "0.2rem solid white",
     width: "350px",
   };
-  
+
   const listHeadingStyle = {
     background: `${list.color}`,
     display: "inline",
@@ -45,9 +43,10 @@ const ListCard = (props) => {
     fontSize: "2rem",
     backgroundColor: "#e3e6ea",
     display: "flex",
-    justifyContent:'spaceEvenly',
+    justifyContent: "spaceEvenly",
     // gap: "1rem",
   };
+
   const addCardStyle = {
     // border:'0.2rem solid black',
     borderRadius: "0.8rem",
@@ -59,6 +58,7 @@ const ListCard = (props) => {
     justifyContent: "center",
     gap: "1rem",
   };
+
   const listNameDiv = {
     display: "flex",
     justifyContent: "spaceBetween",
@@ -75,8 +75,14 @@ const ListCard = (props) => {
   const { fromChildCard, listToCard } = props;
   const dispatch = useDispatch();
   const addEditState = useSelector(selectAddEdit);
+  const currentUser = useSelector((state) => state.singleUser);
 
   const handleEditList = () => {
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
+    }
+
     const newAddEditState = {
       ...addEditState,
       editList: true,
@@ -87,6 +93,10 @@ const ListCard = (props) => {
   };
 
   const handleEditCard = (cardId) => {
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
+    }
     const newAddEditState = {
       ...addEditState,
       editCard: true,
@@ -97,28 +107,35 @@ const ListCard = (props) => {
     console.log("editing card");
   };
 
-  const handleDeleteCard=async(cardId)=>{
-    const updatedLists=project.lists.map((listItem)=>{
-      if(list.id === listItem.id){
+  const handleDeleteCard = async (cardId) => {
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
+    }
+    const updatedLists = project.lists.map((listItem) => {
+      if (list.id === listItem.id) {
         return {
           ...listItem,
-          cards:(listItem.cards).filter((card)=>card.id !== cardId)
-        }
-      }
-      else{
+          cards: listItem.cards.filter((card) => card.id !== cardId),
+        };
+      } else {
         return listItem;
       }
-    })
+    });
     await deleteCardApi(cardId);
-    const updatedProject={
+    const updatedProject = {
       ...project,
-      lists:updatedLists,
-    }
+      lists: updatedLists,
+    };
     await dispatch(updateProjectState({ updatedProject }));
-    toast.success("Card deleted successfully")
-  }
+    toast.success("Card deleted successfully");
+  };
 
   const handleDeleteList = async () => {
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
+    }
     await dispatch(deleteList(list.id));
     const updatedLists = project.lists.filter(
       (listItem) => listItem.id !== list.id
@@ -186,7 +203,7 @@ const ListCard = (props) => {
               />
               <MdOutlineDeleteOutline
                 style={{ width: "30", height: "30" }}
-                onClick={()=>{
+                onClick={() => {
                   handleDeleteCard(card.id);
                 }}
               />
@@ -197,6 +214,13 @@ const ListCard = (props) => {
       <div
         style={addCardStyle}
         onClick={() => {
+          if (
+            !project.member.includes(currentUser.id) &&
+            currentUser.role === "n"
+          ) {
+            toast.error("Only project member can do it");
+            return;
+          }
           fromChildCard(true);
           listToCard(list);
         }}

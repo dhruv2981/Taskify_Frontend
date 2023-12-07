@@ -71,7 +71,9 @@ export const fetchProject = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log("Problem fetching project", error);
+      window.location.href = "http://127.0.0.1:3000/dashboard";
+      toast.error("Problem fetching projects");
+      console.log("Problem fetching project",error);
     }
   }
 );

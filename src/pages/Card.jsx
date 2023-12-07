@@ -79,14 +79,14 @@ function Card() {
   const users = useSelector(selectUsers);
   const currentUser = useSelector((state) => state.singleUser);
   // const socket = new WebSocket("ws://localhost:8000/ws/some_path/");
-  const [comments,setComments]=useState(card.comments);
-  const [socketMessage,setSocketMessage]=useState('');
+  const [comments, setComments] = useState(card.comments);
+  const [socketMessage, setSocketMessage] = useState("");
   const [text, setText] = useState("");
   console.log(users);
-  console.log(card,"card");
+  console.log(card, "card");
 
   const fetchData = async () => {
-    console.log("Checkkkk")
+    console.log("Checkkkk");
     await dispatch(fetchCard(`${id}`));
     await dispatch(fetchUsers());
   };
@@ -124,26 +124,26 @@ function Card() {
 
   useEffect(() => {
     fetchData();
-  //   try{
-  //     console.log("Attempting to open WebSocket connection...");
-  //   socket.addEventListener("open", (event) => {
-  //     console.log("WebSocket connection opened:", event);
-  //   });
-  // }catch(error){
-  //   toast.error("WebSocket Connection Failed");
-  //   console.log("fail",error);
-  // }
-  //   socket.addEventListener("close", (event) => {
-  //     console.log("WebSocket connection closed:", event);
-  //   });
-  //   socket.addEventListener("message", (event) => {
-  //     const data = JSON.parse(event.data);
-  //     // Update comments state with the received comment
-  //     setComments((prevComments) => [...prevComments, data.message]);
-  //   });
-  //   return () => {
-  //     socket.close();
-  //   };
+    //   try{
+    //     console.log("Attempting to open WebSocket connection...");
+    //   socket.addEventListener("open", (event) => {
+    //     console.log("WebSocket connection opened:", event);
+    //   });
+    // }catch(error){
+    //   toast.error("WebSocket Connection Failed");
+    //   console.log("fail",error);
+    // }
+    //   socket.addEventListener("close", (event) => {
+    //     console.log("WebSocket connection closed:", event);
+    //   });
+    //   socket.addEventListener("message", (event) => {
+    //     const data = JSON.parse(event.data);
+    //     // Update comments state with the received comment
+    //     setComments((prevComments) => [...prevComments, data.message]);
+    //   });
+    //   return () => {
+    //     socket.close();
+    //   };
   }, []);
 
   return (
