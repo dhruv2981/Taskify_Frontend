@@ -26,7 +26,7 @@ const UserProjects = () => {
   const currentUser = useSelector((state) => state.singleUser);
 
   useEffect(() => {
-    dispatch(fetchProjects());
+    // dispatch(fetchProjects());
     console.log("hi");
   }, []);
   return (

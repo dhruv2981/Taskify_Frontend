@@ -15,10 +15,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Typography } from "@mui/material";
-import './../../../assets/css/navbar.css';
-import { useDispatch,useSelector } from "react-redux";
+import "./../../../assets/css/navbar.css";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../Apis/UserApi";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const Search = styled("div")(({ theme }) => ({
@@ -65,14 +66,13 @@ function Navbar() {
   //   position:'fixed',
   //   left:'1rem',
   // }
-  const [anchorEl, setAnchorEl] = React.useState('');
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState('');
+  const [anchorEl, setAnchorEl] = React.useState("");
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState("");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-   const dispatch = useDispatch();
-   const currentUser = useSelector((state) => state.singleUser);
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.singleUser);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -91,19 +91,16 @@ function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleLogout=async()=>{
-    try{
-    const response=await logout();
-    console.log(response);
-     window.location.href = "http://127.0.0.1:3000/";
-    
-
-    }
-    catch(error){
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      console.log(response);
+      window.location.href = "http://127.0.0.1:3000/";
+    } catch (error) {
       toast.error("Error logging out");
     }
-  }
-
+  };
+  
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -151,7 +148,7 @@ function Navbar() {
         </IconButton>
         <p>Messages</p>
       </MenuItem>  */}
-       <MenuItem>
+      <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -160,7 +157,7 @@ function Navbar() {
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
           </Badge>
-        </IconButton> 
+        </IconButton>
         <p>Notifications</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
@@ -178,21 +175,23 @@ function Navbar() {
     </Menu>
   );
 
- 
-
-
-
-
-
-  
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          <Link
+              to={`/dashboard/`}
+              style={{ textDecoration: "none",color:'white' }}
+            >
           <div className="taskify">
-            <Typography variant="h4" style={{position:'relative',left:'2.6rem'}}>Taskify</Typography>
+            <Typography
+              variant="h4"
+              style={{ position: "relative", left: "2.6rem" }}     
+            >
+              Taskify
+            </Typography>
           </div>
+          </Link>
           {/* <img
             src="taskify_frontend/src/assets/images/taskify-low-resolution-logo-black-on-white-background (1).png"
             alt="TASKIFY"
