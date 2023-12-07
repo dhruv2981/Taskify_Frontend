@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,11 +10,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { AiFillCaretRight } from "react-icons/ai";
-import {updateCardState} from './../app/features/singleCardSlice';
+import { updateCardState } from "./../app/features/singleCardSlice";
 import toast from "react-hot-toast";
 import CurrentUser from "../CurrentUser/CurrentUser";
 import { createCommentApi } from "../Apis/CommentApi";
-
 
 function Card() {
   const boxStyle = {
@@ -22,53 +21,53 @@ function Card() {
     // top: "30%",
     // left: "50%",
     // transform: "translate(-50%, -50%)",
-    width: '60%',
+    width: "60%",
     bgcolor: "background.paper",
     border: "2px solid #000",
-    borderRadius:'1rem',
+    borderRadius: "1rem",
     boxShadow: 24,
     p: 4,
     display: "flex",
     flexDirection: "column",
     padding: "2rem 3rem 2rem 3rem",
     gap: "1.2rem",
-    backgroundColor:'lightgrey'
+    backgroundColor: "lightgrey",
   };
 
-  const cardPageStyle={
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center',
-    padding:'6rem 0rem 0rem 0rem'
-  }
+  const cardPageStyle = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "6rem 0rem 0rem 0rem",
+  };
 
   const assigneeBaseStyle = {
     border: "0.1rem solid white",
     borderRadius: "0.5rem",
     padding: "1rem 2rem 1rem 2rem",
-    backgroundColor: '#EEEEEE',
-    fontSize:'1rem',
+    backgroundColor: "#EEEEEE",
+    fontSize: "1rem",
   };
 
-  const deadlineStyle={
-    display:'flex',
-    gap:'2rem',
-  }
-  const commentSection={
-    display:'flex',
-    flexDirection:"column",
-    gap:'0.3rem',
-  }
+  const deadlineStyle = {
+    display: "flex",
+    gap: "2rem",
+  };
+  const commentSection = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.3rem",
+  };
 
-  const commentStyle={
-    display:'flex',
-    width:"100%",
-    gap:'1rem',
-    border:'0.2rem solid black',
-    borderRadius:'0.4rem',
-    padding:'0rem 0rem',
-  }
+  const commentStyle = {
+    display: "flex",
+    width: "100%",
+    gap: "1rem",
+    border: "0.2rem solid black",
+    borderRadius: "0.4rem",
+    padding: "0rem 0rem",
+  };
 
   const { id } = useParams();
   console.log(id);
@@ -79,41 +78,72 @@ function Card() {
   const card = useSelector(selectCard);
   const users = useSelector(selectUsers);
   const currentUser = useSelector((state) => state.singleUser);
-  const [text,setText]=useState('');
+  // const socket = new WebSocket("ws://localhost:8000/ws/some_path/");
+  const [comments,setComments]=useState(card.comments);
+  const [socketMessage,setSocketMessage]=useState('');
+  const [text, setText] = useState("");
   console.log(users);
-  console.log(card);
+  console.log(card,"card");
 
   const fetchData = async () => {
+    console.log("Checkkkk")
     await dispatch(fetchCard(`${id}`));
     await dispatch(fetchUsers());
   };
   const checkStatus = () => {
-    if (loading == "idle" || loading == "pending" || loadingUser=="idle" || loadingUser=="pending" ) {
+    if (
+      loading == "idle" ||
+      loading == "pending" ||
+      loadingUser == "idle" ||
+      loadingUser == "pending"
+    ) {
       return true;
     } else {
       return false;
     }
   };
 
-  const sendComment=async()=>{
+  const sendComment = async () => {
     console.log("called");
-    const newComment={
-      text:text,
-      author:currentUser.id,
-      card:card.id
-    }
-    const updatedCard={
+    const newComment = {
+      text: text,
+      author: currentUser.id,
+      card: card.id,
+    };
+    // setSocketMessage(newComment);
+    const updatedCard = {
       ...card,
-      comments:[...(card.comments),newComment]
-    }
-    console.log(updatedCard,"new");
+      comments: [...card.comments, newComment],
+    };
+    console.log(updatedCard, "new");
     await createCommentApi(newComment);
-    await dispatch(updateCardState({updatedCard}));
-    
-  }
+    // socket.send(JSON.stringify({ message: socketMessage}));
+    // setSocketMessage("");
+    await dispatch(updateCardState({ updatedCard }));
+  };
+
   useEffect(() => {
     fetchData();
-    
+  //   try{
+  //     console.log("Attempting to open WebSocket connection...");
+  //   socket.addEventListener("open", (event) => {
+  //     console.log("WebSocket connection opened:", event);
+  //   });
+  // }catch(error){
+  //   toast.error("WebSocket Connection Failed");
+  //   console.log("fail",error);
+  // }
+  //   socket.addEventListener("close", (event) => {
+  //     console.log("WebSocket connection closed:", event);
+  //   });
+  //   socket.addEventListener("message", (event) => {
+  //     const data = JSON.parse(event.data);
+  //     // Update comments state with the received comment
+  //     setComments((prevComments) => [...prevComments, data.message]);
+  //   });
+  //   return () => {
+  //     socket.close();
+  //   };
   }, []);
 
   return (
@@ -163,14 +193,16 @@ function Card() {
                         fontSize: "1.2rem",
                         border: "0.1rem solid black",
                         backgroundColor: "black",
-                        color:'white',
-                        padding:'0.3rem',
-                        borderRadius:'0.3rem',
+                        color: "white",
+                        padding: "0.3rem",
+                        borderRadius: "0.3rem",
                       }}
                     >
                       {user.name}
                     </span>
-                    <span style={{ fontSize: "1.1rem" ,alignSelf:'center'}}>{comment.text}</span>
+                    <span style={{ fontSize: "1.1rem", alignSelf: "center" }}>
+                      {comment.text}
+                    </span>
                   </div>
                 );
               })}
@@ -179,7 +211,7 @@ function Card() {
               <TextField
                 id="input"
                 label=""
-                style={{ width: "97%" }}
+                style={{ width: "90%" }}
                 defaultValue="Type your comment here"
                 onChange={(e) => {
                   e.preventDefault();
@@ -194,7 +226,10 @@ function Card() {
                 }}
                 variant="standard"
               />
-              <div style={{ display: "inline",margin:'2.4rem 0rem 0rem 0rem',}} onClick={sendComment}>
+              <div
+                style={{ display: "inline", margin: "2.4rem 0rem 0rem 0rem" }}
+                onClick={sendComment}
+              >
                 <AiFillCaretRight style={{ width: "2em", height: "2em" }} />
               </div>
             </div>
