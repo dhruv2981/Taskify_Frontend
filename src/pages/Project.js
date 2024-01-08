@@ -85,6 +85,7 @@ const Project = () => {
   const [listPassCard, setListPassCard] = useState("");
   const addEditState = useSelector(selectAddEdit);
   const currentUser = useSelector((state) => state.singleUser);
+  // const addEditState = useSelector(selectAddEdit);
   // if (addEditState.editList===true) {
   //   setOpenListModal(true);
   // }
@@ -144,89 +145,96 @@ const Project = () => {
   return (
     <div>
       <CurrentUser></CurrentUser>
-
-      {!checkStatus() && !openProjectModal && (
-        <div style={fullPage}>
-          <div style={navbarStyle}>
-            <Navbar />
-          </div>
-          <div style={mainContent}>
-            <div style={projectList}>
-              <ListProjectComponent fromChildProject={handleChild} />
-              {/* fromChild={handleChildData} */}
+      <div>
+        {!checkStatus() && !(openProjectModal || addEditState.editProject) && (
+          <div style={fullPage}>
+            <div style={navbarStyle}>
+              <Navbar />
             </div>
-            <div style={centerContainer}>
-              <div style={topContainer}>
-                <h1
-                  style={{
-                    fontSize: "2.6rem",
-                    marginBlockStart: "0.1em",
-                    marginBlockEnd: "0.1em",
-                  }}
-                >
-                  {currentProject.name}
-                </h1>
-                <div
-                  className="addButton"
-                  onClick={() => {
-                    openCreateListModal();
-                  }}
-                  style={{ display: "inline" }}
-                >
-                  <Button
-                    variant="contained"
-                    endIcon={<AddRounded />}
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Add List
-                  </Button>
-                </div>
-                <div
-                  className="addMemberButton"
-                  onClick={() => {
-                    openAddMemberModal();
-                  }}
-                  style={{ display: "inline", alignSelf: "center" }}
-                >
-                  <Button
-                    variant="contained"
-                    endIcon={<AddRounded />}
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Add Member
-                  </Button>
-                </div>
+            <div style={mainContent}>
+              <div style={projectList}>
+                <ListProjectComponent
+                  fromChildProject={handleChild}
+                  currentUser={currentUser}
+                />
+                {/* fromChild={handleChildData} */}
               </div>
-              {
-                <div style={listContainer}>
-                  <ListContainer
-                    currentProject={currentProject}
-                    fromChildCard={handleChildCardData}
-                    listToCard={handleListPass}
-                  />
+              <div style={centerContainer}>
+                <div style={topContainer}>
+                  <h1
+                    style={{
+                      fontSize: "2.6rem",
+                      marginBlockStart: "0.1em",
+                      marginBlockEnd: "0.1em",
+                    }}
+                  >
+                    {currentProject.name}
+                  </h1>
+                  <div
+                    className="addButton"
+                    onClick={() => {
+                      openCreateListModal();
+                    }}
+                    style={{ display: "inline" }}
+                  >
+                    <Button
+                      variant="contained"
+                      endIcon={<AddRounded />}
+                      style={{ fontSize: "1.2rem" }}
+                    >
+                      Add List
+                    </Button>
+                  </div>
+                  <div
+                    className="addMemberButton"
+                    onClick={() => {
+                      openAddMemberModal();
+                    }}
+                    style={{ display: "inline", alignSelf: "center" }}
+                  >
+                    <Button
+                      variant="contained"
+                      endIcon={<AddRounded />}
+                      style={{ fontSize: "1.2rem" }}
+                    >
+                      Add Member
+                    </Button>
+                  </div>
                 </div>
-              }
+                {
+                  <div style={listContainer}>
+                    <ListContainer
+                      currentProject={currentProject}
+                      fromChildCard={handleChildCardData}
+                      listToCard={handleListPass}
+                    />
+                  </div>
+                }
+              </div>
+              {(openListModal || addEditState.editList) && (
+                <ListModal
+                  fromChild={handleChildData}
+                  project={currentProject}
+                />
+              )}
+              {openMemberModal && (
+                <AddMemberModal
+                  fromChildMember={handleChildMemberData}
+                  project={currentProject}
+                />
+              )}
+              {(openCardModal || addEditState.editCard) && (
+                <CardModal
+                  fromChildCard={handleChildCardData}
+                  project={currentProject}
+                  list={listPassCard}
+                />
+              )}
             </div>
-            {(openListModal || addEditState.editList) && (
-              <ListModal fromChild={handleChildData} project={currentProject} />
-            )}
-            {openMemberModal && (
-              <AddMemberModal
-                fromChildMember={handleChildMemberData}
-                project={currentProject}
-              />
-            )}
-            {(openCardModal || addEditState.editCard) && (
-              <CardModal
-                fromChildCard={handleChildCardData}
-                project={currentProject}
-                list={listPassCard}
-              />
-            )}
           </div>
-        </div>
-      )}
-      {openProjectModal && (
+        )}
+      </div>
+      {(openProjectModal || addEditState.editProject) && (
         <ProjectModal fromChildProject={setOpenProjectModal} />
       )}
     </div>

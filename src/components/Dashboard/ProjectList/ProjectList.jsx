@@ -5,30 +5,36 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import { AddRounded } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
-import './../../../assets/css/projectList.css';
-import {Link, useParams} from 'react-router-dom';
+import "./../../../assets/css/projectList.css";
+import { Link, useParams } from "react-router-dom";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { deleteProjectApi } from "../../../Apis/ProjectApi";
 import toast from "react-hot-toast";
-import { useDispatch,useSelector } from "react-redux";
-import { fetchProjects,selectProjects } from "../../../app/features/projectSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProjects,
+  selectProjects,
+} from "../../../app/features/projectSlice";
 import { updateProjectsState } from "../../../app/features/projectSlice";
-
-
+import { CiEdit } from "react-icons/ci";
+import {
+  selectAddEdit,
+  updateAddEditState,
+} from "../../../app/features/addEditStateSlice";
 
 function ListProjectComponent(props) {
   // const [projectList, setProjectList] = useState([]);
-  const {fromChildProject}=props;
+  const { fromChildProject, currentUser } = props;
   const { id } = useParams();
-  console.log(id,"projectList");
-  const dispatch=useDispatch();
-  const projectList=useSelector(selectProjects);
-  console.log(projectList,"select");
+  console.log(id, "projectList");
+  const dispatch = useDispatch();
+  const projectList = useSelector(selectProjects);
+  console.log(projectList, "select");
   const loading = useSelector((state) => state.projects.loading);
-  const openCreateProjectModal=()=>{
-    fromChildProject(true)
-  }
- 
+  const addEditState = useSelector(selectAddEdit);
+  const openCreateProjectModal = () => {
+    fromChildProject(true);
+  };
 
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -75,53 +81,70 @@ function ListProjectComponent(props) {
       },
     },
   }));
-  const listItem={
-    
+  const listItem = {
     // padding:'1rem 0rem 0rem 1rem',
     // textAlign:'center',
-  }
-  const listItemText={
+  };
+  const listItemText = {
     // font:'5rem',
     // padding:'1rem 0rem 0rem 1rem',
     // textAlign:'center',
-  }
-  const addButton={
-
+  };
+  const addButton = {
     // justifySelf:'flexEnd',
     // alignSelf:'center',
+  };
+  const handleEditProject = (project) => {
+    // fromChildProject(true);
 
-  }
-
-  const handleDeleteProject=async(projectId)=>{
-    try{
-    const response=await deleteProjectApi(projectId);
-    
-    // if( id && projectId==id){
-    //   console.log("a");
-    //   window.location.href = "http://127.0.0.1:3000/dashboard";
-    // }
-    
-    console.log(response);
-     const updatedProjects = projectList.filter(
-       (project) => projectId !== project.id
-     );
-     console.log(updatedProjects,"kooo")
-     dispatch(updateProjectsState({updatedProjects}))
-    toast.success("Project deleted successfully");
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
     }
-    catch(error){
+
+    const newAddEditState = {
+      ...addEditState,
+      editProject: true,
+      editProjectId: project.id,
+      // editListId: list.id,
+    };
+
+    dispatch(updateAddEditState({ newAddEditState }));
+    console.log("stage 1");
+  };
+
+  const handleDeleteProject = async (project) => {
+    if (!project.member.includes(currentUser.id) && currentUser.role === "n") {
+      toast.error("Only project member can do it");
+      return;
+    }
+    try {
+      const response = await deleteProjectApi(project.id);
+
+      // if( id && project.id==id){
+      //   console.log("a");
+      //   window.location.href = "http://127.0.0.1:3000/dashboard";
+      // }
+
+      console.log(response, "delete");
+      const updatedProjects = projectList.filter(
+        (currentProject) => project.id !== currentProject.id
+      );
+      console.log(updatedProjects, "kooo");
+      dispatch(updateProjectsState({ updatedProjects }));
+      toast.success("Project deleted successfully");
+    } catch (error) {
       toast.error("Project deletion unsuccessful");
     }
+  };
 
-  }
-   const checkStatus = () => {
-     if (loading == "idle" || loading == "pending") {
-       return true;
-     } else {
-       return false;
-     }
-   };
-
+  const checkStatus = () => {
+    if (loading == "idle" || loading == "pending") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const fetchData = async () => {
     await dispatch(fetchProjects());
@@ -129,7 +152,7 @@ function ListProjectComponent(props) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
@@ -147,20 +170,26 @@ function ListProjectComponent(props) {
           </Search>
           <div className="projectList">
             {projectList.map((project, index) => (
-              <Link
-                to={`/project/${project["id"]}`}
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <div key={index} className="listItem">
+              <div key={index} className="listItem">
+                <Link
+                  to={`/project/${project["id"]}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
                   <p className="listItemText">{project["name"]}</p>
-                  <MdOutlineDeleteOutline
-                    style={{ width: "20", height: "20" }}
-                    onClick={() => {
-                      handleDeleteProject(project.id);
-                    }}
-                  />
-                </div>
-              </Link>
+                </Link>
+                <CiEdit
+                  style={{ width: "20", height: "20" }}
+                  onClick={() => {
+                    handleEditProject(project);
+                  }}
+                />
+                <MdOutlineDeleteOutline
+                  style={{ width: "20", height: "20" }}
+                  onClick={() => {
+                    handleDeleteProject(project);
+                  }}
+                />
+              </div>
             ))}
           </div>
           <div
@@ -179,4 +208,3 @@ function ListProjectComponent(props) {
   );
 }
 export default ListProjectComponent;
-

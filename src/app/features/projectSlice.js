@@ -21,7 +21,9 @@ const projectSlice = createSlice({
   reducers: {
     updateProjectsState: (state, action) => {
       const { updatedProjects } = action.payload;
-      state.project = updatedProjects;
+      state.projects = updatedProjects;
+      console.log(updatedProjects,"project slcie")
+
     },
   },
 
@@ -77,8 +79,9 @@ export const createProject = createAsyncThunk(
 
 // export const updateProject = createAsyncThunk(
 //   "project/updateProjects",
-//   async (projectId, newProject) => {
+//   async (object) => {
 //     try {
+//       const { projectId, newProject } = object;
 //       const response = await updateProjectApi(projectId, newProject);
 //       console.log(response.data);
 //       return response.data;

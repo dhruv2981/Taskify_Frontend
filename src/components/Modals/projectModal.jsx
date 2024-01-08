@@ -12,6 +12,18 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
 import { fetchUsers, selectUsers } from "../../app/features/userSlice";
 import { createProject } from "../../app/features/projectSlice";
+import {
+  selectAddEdit,
+  updateAddEditState,
+} from "../../app/features/addEditStateSlice";
+import { useParams } from "react-router-dom";
+import { updateProjectApi } from "../../Apis/ProjectApi";
+import {
+  selectProjects,
+  updateProjectsState,
+} from "../../app/features/projectSlice";
+import { updateProjectState } from "../../app/features/singleProjectSlice";
+import  toast  from "react-hot-toast";
 
 const ProjectModal = (props) => {
   const ITEM_HEIGHT = 48;
@@ -43,7 +55,9 @@ const ProjectModal = (props) => {
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
   const currentUser = useSelector((state) => state.singleUser);
-
+  const projectList = useSelector(selectProjects);
+  const addEditState = useSelector(selectAddEdit);
+  const { id } = useParams();
   const handleCreateProject = () => {
     const removedId = currentUser["id"];
     const newProject = {
@@ -64,6 +78,49 @@ const ProjectModal = (props) => {
     console.log("vr");
   };
 
+  const handleEditProject = async () => {
+    const removedId = currentUser["id"];
+    const updatedProject = {
+      name: projectName,
+      wiki: projectDescription,
+      member: [...personId, removedId],
+      year1_visibility: visibilityYear1,
+      year2_visibility: visibilityYear2,
+      year3_visibility: visibilityYear3,
+      year4_visibility: visibilityYear4,
+      year5_visibility: visibilityYear5,
+    };
+    const response = await updateProjectApi(
+      addEditState.editProjectId,
+      updatedProject
+    );
+    const updatedProjectResponse = response.data;
+    console.log(updatedProjectResponse);
+    console.log(id)
+    if (id == addEditState.editProjectId) {
+      console.log("yes");
+      dispatch(updateProjectState(updatedProjectResponse));
+    }
+    
+    const updatedProjects = projectList.map((project) =>
+      addEditState.editProjectId == project.id
+        ? updatedProjectResponse
+        : project
+    );
+    console.log(updatedProjects);
+    dispatch(updateProjectsState({updatedProjects}));
+    const newAddEditState = {
+      ...addEditState,
+      editProject: false,
+      editProjectId: "",
+      // editListId: list.id,
+    };
+    dispatch(updateAddEditState({ newAddEditState }));
+    toast.success("project edited successfully")
+
+    // dispatch(editProject)
+  };
+
   const { fromChildProject } = props;
 
   const closeCreateProjectModal = () => {
@@ -74,6 +131,13 @@ const ProjectModal = (props) => {
   const handleClose = () => {
     setOpen(false);
     fromChildProject(false);
+     const newAddEditState = {
+       ...addEditState,
+       editProject: false,
+       editProjectId: "",
+       // editListId: list.id,
+     };
+     dispatch(updateAddEditState({ newAddEditState }));
   };
   const [personId, setPersonId] = React.useState([]);
   const [projectName, setProjectName] = React.useState("");
@@ -226,10 +290,12 @@ const ProjectModal = (props) => {
           <Button
             variant="contained"
             onClick={() => {
-              handleCreateProject();
+              addEditState.editProject
+                ? handleEditProject()
+                : handleCreateProject();
             }}
           >
-            Create
+            {addEditState.editProject ? "Edit" : "Create"}
           </Button>
         </Box>
         {}

@@ -9,6 +9,8 @@ const addEditStateSlice = createSlice({
       editListId: "",
       editCard:false,
       editCardId:'',
+      editProject:false,
+      editProjectId:'',
     },
     loading: "idle",
     error: "Lists could not be retreived",

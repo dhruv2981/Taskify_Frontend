@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 const ListCard = (props) => {
   const { list, project } = props;
   const cards = list.cards;
+  console.log(cards,"jjj")
 
   const listCardStyle = {
     display: "flex",

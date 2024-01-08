@@ -6,8 +6,9 @@ import UserProjects from "../components/Dashboard/MainArea/userProjects";
 import ProjectModal from "../components/Modals/projectModal";
 import { CurrentUser } from "../CurrentUser/CurrentUser";
 import { fetchProjects } from "../app/features/projectSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import UserCards from "./../components/Dashboard/MainArea/userCard";
+import { selectAddEdit } from "../app/features/addEditStateSlice";
 
 function Dashboard() {
   const [openProjectModal, setOpenProjectModal] = useState(false);
@@ -51,6 +52,8 @@ function Dashboard() {
   const dispatch = useDispatch();
   const projectSlider = {};
   const cardSlider = {};
+  const currentUser = useSelector((state) => state.singleUser);
+  const addEditState = useSelector(selectAddEdit);
   useEffect(() => {
     dispatch(fetchProjects);
   }, []);
@@ -58,14 +61,17 @@ function Dashboard() {
   return (
     <div>
       <CurrentUser></CurrentUser>
-      {!openProjectModal && (
+      {!(openProjectModal || addEditState.editProject) && (
         <div style={fullPage}>
           <div style={navbarStyle}>
             <Navbar />
           </div>
           <div style={mainContent}>
             <div style={projectList}>
-              <ListProjectComponent fromChildProject={handleChildData} />
+              <ListProjectComponent
+                fromChildProject={handleChildData}
+                currentUser={currentUser}
+              />
             </div>
             <div style={centerContainer}>
               <div style={projectSlider}>
@@ -78,7 +84,9 @@ function Dashboard() {
           </div>
         </div>
       )}
-      {openProjectModal && <ProjectModal fromChildProject={handleChildData} />}
+      {(openProjectModal || addEditState.editProject) && (
+        <ProjectModal fromChildProject={handleChildData} />
+      )}
     </div>
   );
 }

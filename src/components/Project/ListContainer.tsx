@@ -13,7 +13,7 @@ const listContainer = (props: any) => {
 
   const { currentProject, fromChildCard, listToCard } = props;
   const lists = currentProject.lists;
-  // console.log(currentProject.lists,"v")
+  console.log(currentProject.lists,"v")
 
   return (
     <div>

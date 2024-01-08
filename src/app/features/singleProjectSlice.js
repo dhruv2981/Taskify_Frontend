@@ -35,8 +35,11 @@ const singleProjectSlice = createSlice({
     //   );
     // },
     updateProjectState: (state, action) => {
+      console.log(state);
       const { updatedProject } = action.payload;
       state.project = updatedProject;
+      console.log(state.project,"state project");
+      console.log(updatedProject,"updated project");
     },
   },
   //   },
